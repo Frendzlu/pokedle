@@ -72,19 +72,41 @@ export default class Pokemon {
     rarity?: string
     shape?: string
 
-    constructor(data: IPokemon) {
+    source: "url" | "localStorage" = "url"
+
+    constructor(data: Pokemon)
+    constructor(data: IPokemon, id: number)
+    constructor(data: Pokemon | IPokemon, id?: number) {
+        console.log(id)
+        if (typeof id === "undefined"){
+            data = data as Pokemon
+            this.imageUrl = data.imageUrl
+            this.types = data.types
+            this.source = "localStorage"
+            this.color = data.color
+            this.flavorText = data.flavorText
+            this.generation = data.generation
+            this.growthRate = data.growthRate
+            this.habitat = data.habitat
+            this.hasGenders = data.hasGenders
+            this.rarity = data.rarity
+            this.shape = data.shape
+        } else {
+            data = data as IPokemon
+            this.imageUrl = data.sprites ? data.sprites.front_default : "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png"
+            this.types = data.types.map(type => type.type.name)
+        }
         this.name = data.name
         this.apiId = data.id
-        this.id = realId(data.id)
-        this.types = data.types.map(type => type.type.name)
         this.evolutionInfo = [data.id]
         this.height = data.height
         this.weight = data.weight
-        this.imageUrl = data.sprites.front_default
         this.species = data.species
+        this.id = data.id
     }
 
     async getSpeciesInfo() {
+        if (this.source == "localStorage") return
         let speciesInfo = await fetch(this.species.url)
             .then(res => res.json())
             .catch(r => console.log(r)) as ISpecies
@@ -92,10 +114,10 @@ export default class Pokemon {
         this.flavorText = processFlavor(speciesInfo.flavor_text_entries)
         this.generation = speciesInfo.generation.name
         this.growthRate = speciesInfo.growth_rate.name
-        this.habitat = speciesInfo.habitat.name
+        this.habitat = speciesInfo.habitat ? speciesInfo.habitat.name : "unknown"
         this.hasGenders = speciesInfo.has_gender_differences
         this.rarity = getHighestRarity(speciesInfo)
-        this.shape = speciesInfo.shape.name
+        this.shape = speciesInfo.shape ? speciesInfo.shape.name : "unknown"
     }
 }
 
@@ -111,12 +133,4 @@ function processFlavor(flavors: IFlavorText[]) {
         .map(flavor => flavor.flavor_text)
     let unique = [...new Set(engFlavors)];
     return unique.join(' ')
-}
-
-function realId(id: number) {
-    let temp = id.toString().split('')
-    if (id >= 1000) {
-        temp.splice(2 - 1 , 1)
-    }
-    return parseInt(temp.join(''))
 }
