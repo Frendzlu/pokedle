@@ -52,6 +52,18 @@ export interface Generation {
     main_region: NURI
 }
 
+const generationDict = {
+    "generation-i": 1,
+    "generation-ii": 2,
+    "generation-iii": 3,
+    "generation-iv": 4,
+    "generation-v": 5,
+    "generation-vi": 6,
+    "generation-vii": 7,
+    "generation-viii": 8,
+    "generation-ix": 9
+}
+
 export default class Pokemon {
     name: string
     id: number
@@ -112,7 +124,7 @@ export default class Pokemon {
             .catch(r => console.log(r)) as ISpecies
         this.color = speciesInfo.color.name
         this.flavorText = processFlavor(speciesInfo.flavor_text_entries)
-        this.generation = speciesInfo.generation.name
+        this.generation = generationDict[speciesInfo.generation.name]
         this.growthRate = speciesInfo.growth_rate.name
         this.habitat = speciesInfo.habitat ? speciesInfo.habitat.name : "unknown"
         this.hasGenders = speciesInfo.has_gender_differences

@@ -83,7 +83,7 @@
 			<li class="link">
 				<div id="pokemonProgressBar">
 					<div style="width: {width}%; height: 2rem; background-color: green"></div>
-					<p style="z-index: 1; position:absolute; top: 0	rem; left: 0px; width: 100%">Loading: {width}%</p>
+					<p style="z-index: 1; position:absolute; top: 0rem; left: 0px; width: 100%">Loading: {width.toFixed(2)}%</p>
 				</div>
 			</li>
 		</ul>
