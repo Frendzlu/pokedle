@@ -64,6 +64,17 @@ const generationDict = {
     "generation-ix": 9
 }
 
+function latinize(str: string) {
+    let res = ""
+    for (let i of "aeiouy"){
+        if (str.endsWith(i)){
+            res = str.substring(0, str.length-1)
+            break
+        }
+    }
+    return (res ? res : str) + "us";
+}
+
 export default class Pokemon {
     name: string
     id: number
@@ -86,11 +97,11 @@ export default class Pokemon {
 
     source: "url" | "localStorage" = "url"
 
-    constructor(data: Pokemon)
+    constructor(data: Pokemon, id: number)
     constructor(data: IPokemon, id: number)
     constructor(data: Pokemon | IPokemon, id?: number) {
-        console.log(id)
-        if (typeof id === "undefined"){
+        //console.log(id)
+        if (typeof (data as Pokemon).shape != "undefined"){
             data = data as Pokemon
             this.imageUrl = data.imageUrl
             this.types = data.types
@@ -103,18 +114,22 @@ export default class Pokemon {
             this.hasGenders = data.hasGenders
             this.rarity = data.rarity
             this.shape = data.shape
+            this.species = data.species
         } else {
             data = data as IPokemon
             this.imageUrl = data.sprites ? data.sprites.front_default : "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png"
             this.types = data.types.map(type => type.type.name)
+            this.species = {
+                name: latinize(data.species.name),
+                url: data.species.url
+            }
         }
         this.name = data.name
         this.apiId = data.id
         this.evolutionInfo = [data.id]
         this.height = data.height
         this.weight = data.weight
-        this.species = data.species
-        this.id = data.id
+        this.id = id
     }
 
     async getSpeciesInfo() {

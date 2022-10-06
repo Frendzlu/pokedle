@@ -104,6 +104,7 @@
         background-color: white;
         border-bottom: 1px solid hsl(0, 0%, 70%);
         position: relative;
+        margin-top: 1.2rem;
     }
     .multiselect:not(.readonly):hover {
         border-bottom-color: hsl(0, 0%, 50%);
@@ -114,6 +115,7 @@
         display: flex;
         flex-wrap: wrap;
         position: relative;
+        min-width: 15rem
     }
     .tokens::after {
         background: none repeat scroll 0 0 transparent;
@@ -155,9 +157,9 @@
         color: hsl(214, 17%, 92%);
         display: flex;
         justify-content: center;
-        height: 1.25rem;
+        height: 0.75rem;
         margin-left: .25rem;
-        min-width: 1.25rem;
+        min-width: 0.75rem;
     }
     .token-remove:hover, .remove-all:hover {
         background-color: hsl(215, 21%, 43%);
@@ -168,13 +170,13 @@
         align-items: center;
         display: flex;
         flex: 1;
-        min-width: 15rem;
+        min-width: 3rem;
     }
 
     input {
         border: none;
-        font-size: 1.5rem;
-        line-height: 1.5rem;
+        font-size: 1rem;
+        line-height: 1rem;
         margin: 0;
         outline: none;
         padding: 0;
@@ -240,27 +242,45 @@
     .hidden {
         display: none;
     }
-</style>
-
-<div class="multiselect" class:readonly>
-	<div class="tokens" class:showOptions on:click={handleTokenClick}>
+    /* Tooltip container */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+    }
+    
+    /* Tooltip text */
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: black;
+      color: #fff;
+      text-align: center;
+      padding: 5px 0;
+      border-radius: 6px;
+     
+      /* Position the tooltip text - see examples below! */
+      position: absolute;
+      z-index: 1;
+    }
+    
+    /* Show the tooltip text when you mouse over the tooltip container */
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+    }
+    </style>
+<div class="multiselect rounded-md" class:readonly>
+	<div class="tokens rounded-md" class:showOptions on:click={handleTokenClick}>
 		{#each Object.values(selected) as s}
-			<div style="background-color: {s.color}" class="token" data-id="{s.value}">
-				<span class="vitext">{s.name}</span>
-				{#if !readonly}
-					<div class="token-remove" title="Remove {s.name}">
-						<svg class="icon-clear" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
-							<path d="{iconClearPath}"/>
-						</svg>
-					</div>
-				{/if}
+			<div class="tooltip token" style="background-color: {s.color}" data-id="{s.value}">
+				<span class="tooltiptext">{s.name}</span>
 			</div>
 		{/each}
-		<div class="actions">
+		<div class="actions rounded-md">
 			{#if !readonly}
-				<input id={id} autocomplete="off" bind:value={inputValue} bind:this={input} on:keyup={handleKeyup} on:blur={handleBlur} placeholder={placeholder}/>
+				<input class="rounded-md" id={id} autocomplete="off" bind:value={inputValue} bind:this={input} on:keyup={handleKeyup} on:blur={handleBlur} placeholder={placeholder}/>
 				<div class="remove-all" title="Remove All" class:hidden={!Object.keys(selected).length}>
-					<svg class="icon-clear" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+					<svg class="icon-clear" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24">
 						<path d="{iconClearPath}"/>
 					</svg>
 				</div>
@@ -272,7 +292,7 @@
 	<select bind:this={slot} type="multiple" class="hidden"><slot></slot></select>
 
 	{#if showOptions}
-		<ul class="options" transition:fly="{{duration: 200, y: 5}}" on:mousedown|preventDefault={handleOptionMousedown}>
+		<ul class="options rounded-md" transition:fly="{{duration: 200, y: 5}}" on:mousedown|preventDefault={handleOptionMousedown}>
 			{#each filtered as option}
 				<li style="background-color: {option.color}" class:selected={selected[option.value]} class="vitext" class:active={activeOption === option} data-value="{option.value}">{option.name}</li>
 			{/each}

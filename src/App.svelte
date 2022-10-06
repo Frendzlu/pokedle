@@ -15,13 +15,18 @@
 
 	export let pokemons: any[]
 	let processable: any[] = []
+	let pokemonAmount = 1154
 
 	pokemonDB.subscribe((val) => pokemons = val)
 	toProcess.subscribe((val) => processable = val)
 
   	async function getApiData() {
 		const res = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=10000`)
-			.then(r => r.json()) as {results: NURI[]}
+			.then(r => r.json()) as {
+				count: number
+				results: NURI[]
+			}
+		pokemonAmount = res.count
 		processable = res.results.map((result, i)=> {return {url: result.url, id: i}})
 		toProcess.update(() => processable)
 
@@ -54,7 +59,6 @@
 			}
 			toProcess.update(() => processable)
 			processable = processable
-			
 		}
 	}
 	if (pokemons.length == 0) {
