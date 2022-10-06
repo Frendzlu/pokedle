@@ -34,7 +34,7 @@
 				(color ? pokemon.color == color : true) &&
 				(habitat ? pokemon.habitat == habitat : true) &&
 				(shape ? pokemon.shape == shape : true) &&
-				(generation ? true : parseInt(pokemon.generation) == generation) &&
+				(generation < 1 ? true : parseInt(pokemon.generation) == generation) &&
 				typeFlag
 		})
 		$: visible = potentialPokes.slice(currentPage * pokesPerPage, currentPage * pokesPerPage + pokesPerPage)
