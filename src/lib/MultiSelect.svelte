@@ -206,6 +206,7 @@
         position: absolute;
         top: calc(100% + 1px);
         width: 100%;
+	    z-index: 10;
     }
     li {
         background-color: white;

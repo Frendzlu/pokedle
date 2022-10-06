@@ -87,7 +87,7 @@
 				</div>
 			</div>
 			<div class="relative" style="min-width: 15rem;">
-				<label for="types" class="block text-sm font-medium text-gray-700">Types</label>
+				<label class="block text-sm font-medium text-gray-700">Types</label>
 				<div class="relative mt-1 rounded-md shadow-sm">
 					<div class="absolute inset-y-0 right-0 flex items-center">
 						<MultiSelect id='types' bind:value={types} inputEvent={() => {currentPage = 0}}>
