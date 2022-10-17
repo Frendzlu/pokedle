@@ -90,7 +90,6 @@ export default class Pokemon {
     constructor(data: Pokemon, id: number)
     constructor(data: IPokemon, id: number)
     constructor(data: Pokemon | IPokemon, id?: number) {
-        //console.log(id)
         if (typeof (data as Pokemon).shape != "undefined"){
             data = data as Pokemon
             this.imageUrl = data.imageUrl || "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png"

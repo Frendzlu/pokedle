@@ -200,7 +200,32 @@
 
 	#imgdiv {
 		background-color: #aeaeaeee;
+		overflow-x: hidden;
 	}
+
+    .tooltip {
+        position: relative;
+    }
+
+    /* Tooltip text */
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 120px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        padding: 5px 0;
+        border-radius: 6px;
+
+        /* Position the tooltip text - see examples below! */
+        position: absolute;
+        z-index: 10;
+    }
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+	    width: 4rem;
+	    font-size: xx-small;
+    }
 </style>
 <p>{activeOption ? titleCase(activeOption.name) : "No pokemon found"}</p>
 <div class="multiselect rounded-md" class:readonly>
@@ -222,7 +247,10 @@
 	{#if showOptions}
 		<div id="imgdiv" class="options flex flex-row flex-wrap rounded-md" transition:fly="{{duration: 200, y: 5}}" on:mousedown|preventDefault={handleOptionMousedown}>
 			{#each filtered as option}
-				<img class="w-14" src={option.imgURL} class:active={activeOption === option} data-value="{option.value}" alt="sus">
+				<div class="tooltip">
+					<img class="w-14" src={option.imgURL} class:active={activeOption === option} data-value="{option.value}" alt="sus">
+					<p class="tooltiptext">{option.name}</p>
+				</div>
 			{/each}
 		</div>
 	{/if}

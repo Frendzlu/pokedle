@@ -13,12 +13,18 @@
     	return parseInt(x[x.length - 2])
 	}
 
-	export let pokemons: any[]
+	export let pokemons: Pokemon[]
 	let processable: any[] = []
 	let pokemonAmount = 1154
 
 	pokemonDB.subscribe((val) => pokemons = val)
 	toProcess.subscribe((val) => processable = val)
+
+	let nameSet = new Set(pokemons.map(el => el.name))
+	let tempPokes: Pokemon[] = []
+	nameSet.forEach(name => tempPokes.push(pokemons.find(el => el.name == name )))
+	pokemons = tempPokes
+	pokemonDB.set(pokemons)
 
   	async function getApiData() {
 		const res = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=10000`)
@@ -49,10 +55,11 @@
 				.then(r => r.json()) as IPokemon
 			let poke = new Pokemon(pokedata, uriJSON.id)
 			await poke.getSpeciesInfo()
-			pokemons.push(poke)
-			pokemonDB.update(() => pokemons)
-			pokemons = pokemons
-		
+			if (!pokemons.find(el => el.name == poke.name)) {
+				pokemons.push(poke)
+				pokemonDB.update(() => pokemons)
+				pokemons = pokemons
+			}
 			const index = processable.findIndex(el => el.id == uriJSON.id);
 			if (index > -1) {
 				processable.splice(index, 1);
@@ -69,7 +76,7 @@
 	}
 
 	$: width = (pokemons.length / pokemonAmount) * 100
-	$: disableGame = pokemons.length == pokemonAmount
+	$: disableGame = pokemons.length != pokemonAmount
 
 	let url = ""
 </script>
@@ -79,12 +86,18 @@
 			<li class="link">
 				<Link to="/">PokeList</Link>
 			</li>
-			<li class="link">
-				<Link to="/pokedle" disabled={true}>Pokedle</Link>
-			</li>
-			<li class="link">
-				<button on:click={clearPokes}>gotta kill 'em all</button>
-			</li>
+			{#if !disableGame}
+				<li class="link">
+					<Link to="/pokedle">Pokedle</Link>
+				</li>
+			{:else}
+				<li style="font-size: small; color: aqua" class="mx-4">
+					<p>Pokedle (please wait, we're catching the pokemons)</p>
+				</li>
+			{/if}
+<!--			<li class="link">-->
+<!--				<button on:click={clearPokes}>gotta kill 'em all</button>-->
+<!--			</li>-->
 			<li class="link">
 				<div id="pokemonProgressBar">
 					<div style="width: {width}%; height: 2rem; background-color: green"></div>
@@ -117,7 +130,7 @@
 .link {
 	width: 10rem;
 	color: aqua;
-	margin: 0, 2rem, 0, 2rem;
+    margin: 0 2rem;
 }
 
 #pokemonProgressBar{
