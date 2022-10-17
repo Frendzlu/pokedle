@@ -47,3 +47,14 @@ export function titleCase(str: string) {
 export function toRoman(str: string) {
 	return ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"][parseInt(str)-1]
 }
+
+export function fixHabitat(str: string) {
+	switch (str) {
+		case "waters-edge": 
+			return "Water's edge"
+		case "rough-terrain":
+			return "Rough terrain"
+		default:
+			return titleCase(str)
+	}
+}

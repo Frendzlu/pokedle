@@ -27,7 +27,7 @@
         remove("grass")
 	});
 
-	$: if (!first) value = Object.values(selected).map(o => o.value);
+	$: if (!first) value = Object.values(selected).map(o => (o as any).value);
 	$: filtered = options.filter(o => inputValue ? o.name.toLowerCase().includes(inputValue.toLowerCase()) : o);
 	$: if (activeOption && !filtered.includes(activeOption) || !activeOption && inputValue) activeOption = filtered[0];
 

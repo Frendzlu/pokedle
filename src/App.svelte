@@ -68,7 +68,8 @@
 		loadPokemons();
 	}
 
-	$: width = (pokemons.length / 1154) * 100
+	$: width = (pokemons.length / pokemonAmount) * 100
+	$: disableGame = pokemons.length == pokemonAmount
 
 	let url = ""
 </script>
@@ -79,7 +80,7 @@
 				<Link to="/">PokeList</Link>
 			</li>
 			<li class="link">
-				<Link to="/pokedle">Pokedle</Link>
+				<Link to="/pokedle" disabled={true}>Pokedle</Link>
 			</li>
 			<li class="link">
 				<button on:click={clearPokes}>gotta kill 'em all</button>

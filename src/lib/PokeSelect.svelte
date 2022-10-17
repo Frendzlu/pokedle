@@ -3,14 +3,14 @@
 	import { fly } from 'svelte/transition';
 	import {titleCase} from "../Utils";
 	export let id = '';
-	export let value ="";
-	export let options: {name: string, value: string, imgURL: string}[] = []
+	export let value = {};
+	export let options: {name: string, value: number, imgURL: string}[] = []
 	export let readonly = false;
 	export let placeholder = '';
 
 	let input,
 		inputValue,
-		activeOption = {name: "loading", value: "-1"},
+		activeOption = {name: "loading", value: -1, imgURL: ""},
 		showOptions = true
 
 
@@ -24,21 +24,25 @@
 		inputValue = ""
 		optionsVisibility(false)
 		previousTop = 0
-		activeOption = {name: "loading", value: "-1"}
+		activeOption = {name: "loading", value: -1, imgURL: ""}
 		dispatch('submit', {
 			pokemon: value
 		});
 	}
 
+	function onClick() {
+		if (!showOptions) showOptions = true
+	}
+
 	function optionsVisibility(show) {
 		try {
-			// if (readonly) return;
-			// if (typeof show === 'boolean') {
-			// 	showOptions = show;
-			// 	show && input.focus();
-			// } else {
-			// 	showOptions = !showOptions;
-			// }
+			if (readonly) return;
+			if (typeof show === 'boolean') {
+				showOptions = show;
+				show && input.focus();
+			} else {
+				showOptions = !showOptions;
+			}
 		} catch (e) {
 			console.log(e)
 		}
@@ -193,13 +197,17 @@
     .hidden {
         display: none;
     }
+
+	#imgdiv {
+		background-color: #aeaeaeee;
+	}
 </style>
 <p>{activeOption ? titleCase(activeOption.name) : "No pokemon found"}</p>
 <div class="multiselect rounded-md" class:readonly>
 	<div class="tokens rounded-md" class:showOptions>
 		<div class="actions rounded-md">
 			{#if !readonly}
-				<input class="rounded-md" id={id} autocomplete="off" bind:value={inputValue} bind:this={input} on:keydown={handleKeyup} on:focus={()=>optionsVisibility(true)} on:blur={()=>optionsVisibility(false)} placeholder={placeholder}/>
+				<input class="rounded-md" id={id} autocomplete="off" bind:value={inputValue} bind:this={input} on:click={onClick} on:keydown={handleKeyup} on:focus={()=>optionsVisibility(true)} on:blur={()=>optionsVisibility(false)} placeholder={placeholder}/>
 				<svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M5 8l4 4 4-4z"></path></svg>
 			{/if}
 		</div>

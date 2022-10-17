@@ -159,9 +159,9 @@
 						<option value="all" selected>All</option>
 						<option value="grassland">Grassland</option>
 						<option value="mountain">Mountain</option>
-						<option value="waters-edge">Waters-edge</option>
+						<option value="waters-edge">Water's edge</option>
 						<option value="forest">Forest</option>
-						<option value="rough-terrain">Rough-terrain</option>
+						<option value="rough-terrain">Rough terrain</option>
 						<option value="cave">Cave</option>
 						<option value="urban">Urban</option>
 						<option value="sea">Sea</option>

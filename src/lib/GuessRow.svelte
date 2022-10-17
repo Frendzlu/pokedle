@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Pokemon from "../Pokemon";
-	import {typeColors} from "../Utils";
+	import type Pokemon from "../Pokemon";
+	import {fixHabitat, titleCase, toRoman, typeColors} from "../Utils";
 
 	export let guess: Pokemon
 	export let correct: Pokemon
@@ -38,28 +38,30 @@
 		height: 4rem;
 	}
 </style>
-<div class="flex flex-row">
+<div class="flex flex-row justify-center">
 	<div>
-		<img src={guess.imageUrl}>
+		<img src={guess.imageUrl} class="h-16 w-16">
 	</div>
 	<div class={compare(guess.species.name, correct.species.name)}>
-		<p>{guess.species.name}</p>
+		<p>{titleCase(guess.species.name)}</p>
 	</div>
 	<div class={compare(guess.generation, correct.generation)}>
-		<p>{guess.generation}</p>
+		<p>{toRoman(guess.generation)}</p>
 	</div>
-	<div class="{compareTypes(guess.types, correct.types)}">
-		{#each guess.types as type}
-			<div class="rounded-md w-16 h-6 mx-1" style="background-color: {typeColors[type]}">
-				<span>{type}</span>
-			</div>
-		{/each}
+	<div class="{compareTypes(guess.types, correct.types)} flex flex-row justify-center">
+		<div class="flex flex-col justify-center">
+			{#each guess.types as type}
+				<div class="rounded-md w-16 h-6 m-1" style="background-color: {typeColors[type]}">
+					<span class="">{type}</span>
+				</div>
+			{/each}
+		</div>
 	</div>
 	<div class={compare(guess.habitat, correct.habitat)}>
-		<p>{guess.habitat}</p>
+		<p>{fixHabitat(guess.habitat)}</p>
 	</div>
 	<div class={compare(guess.shape, correct.shape)}>
-		<p>{guess.shape}</p>
+		<p>{titleCase(guess.shape)}</p>
 	</div>
 	<div class={compare(guess.height, correct.height)}>
 		<p>{guess.height}</p>
