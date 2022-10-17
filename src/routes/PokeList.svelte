@@ -12,11 +12,11 @@
 		let weightMode: string = ">"
 		
 		let types: string[] = []
-		let shape = ""
-		let habitat = ""
+		let shape = "all"
+		let habitat = "all"
 		let species = ""
-		let color = ""
-		let generation = 0
+		let color = "all"
+		let generation = -1
 
 		$: potentialPokes = pokemons.filter(pokemon => {
 			let typeFlag = false
@@ -31,10 +31,10 @@
 				(heightMode == "=" ? pokemon.height == height : heightMode == ">" ? pokemon.height > height : pokemon.height < height) &&
 				(weightMode == "=" ? pokemon.weight == weight : weightMode == ">" ? pokemon.weight > weight : pokemon.weight < weight) &&
 				pokemon.species.name.includes(species) &&
-				(color ? pokemon.color == color : true) &&
-				(habitat ? pokemon.habitat == habitat : true) &&
-				(shape ? pokemon.shape == shape : true) &&
-				(generation < 1 ? true : parseInt(pokemon.generation) == generation) &&
+				((color ? pokemon.color == color : true) || color == "all") &&
+				((habitat ? pokemon.habitat == habitat : true) || habitat == "all") &&
+				((shape ? pokemon.shape == shape : true) || shape == "all") &&
+				(generation < 0 ? true : parseInt(pokemon.generation) == generation) &&
 				typeFlag
 		})
 		$: visible = potentialPokes.slice(currentPage * pokesPerPage, currentPage * pokesPerPage + pokesPerPage)
@@ -46,7 +46,7 @@
 		let pageString = "h-10 py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
 
 	</script>
-	<div style="background-color: #eaeaea; min-height: 100vh">
+	<div style="background-color: #aeaeae; min-height: 100vh" class="pb-12">
 		<div class="flex justify-between mx-8">
 			<div>
 				<label for="name" class="block text-sm font-medium text-gray-700">Name</label>
@@ -117,6 +117,7 @@
 				<label for="shape" class="block text-sm font-medium text-gray-700">Shape</label>
 				<div class="relative mt-1 rounded-md shadow-sm">
 					<select id="shape" bind:value={shape} on:input={() => currentPage = 0} class="h-full block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white">
+						<option value="all" selected>All</option>
 						<option value="quadruped">Quadruped</option>
 						<option value="upright">Upright</option>
 						<option value="armor">Armor</option>
@@ -139,6 +140,7 @@
 				<label for="generation" class="block text-sm font-medium text-gray-700">Generation</label>
 				<div class="relative mt-1 rounded-md shadow-sm">
 					<select id="generation" bind:value={generation} on:input={() => currentPage = 0} class="h-full block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white">
+						<option value="-1" selected>All</option>
 						<option value="1">I</option>
 						<option value="2">II</option>
 						<option value="3">III</option>
@@ -147,7 +149,6 @@
 						<option value="6">VI</option>
 						<option value="7">VII</option>
 						<option value="8">VIII</option>
-						<option value="0">All</option>
 					</select>
 				</div>
 			</div>
@@ -155,6 +156,7 @@
 				<label for="habitat" class="block text-sm font-medium text-gray-700">Habitat</label>
 				<div class="relative mt-1 rounded-md shadow-sm">
 					<select id="habitat" bind:value={habitat} on:input={() => currentPage = 0} class="h-full block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white">
+						<option value="all" selected>All</option>
 						<option value="grassland">Grassland</option>
 						<option value="mountain">Mountain</option>
 						<option value="waters-edge">Waters-edge</option>
@@ -172,6 +174,7 @@
 				<label for="color" class="block text-sm font-medium text-gray-700">Color</label>
 				<div class="relative mt-1 rounded-md shadow-sm">
 					<select id="color" bind:value={color} on:input={() => currentPage = 0} class="h-full block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white">
+						<option value="all" selected>All</option>
 						<option value="green">Green</option>
 						<option value="red">Red</option>
 						<option value="blue">Blue</option>
@@ -191,7 +194,7 @@
 				<PokeTile pokemon={pokemon}/>
 			{/each}
 		</div>
-		<ul class="flex w-screen flex-wrap justify-center m-2 mb-4">
+		<ul class="flex w-screen flex-wrap justify-center m-2 fixed left-0 bottom-0">
 			<li>
 				<button on:click={() => currentPage = (currentPage !== 0 ? currentPage - 1 : currentPage)} class="h-10 py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</button>
 			</li>

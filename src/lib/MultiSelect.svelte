@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
 	export let id = '';
@@ -58,6 +58,7 @@
 		}
 	}
 
+	let previousTop = 0
 	function handleKeyup(e) {
 		if (e.keyCode === 13) {
 			Object.keys(selected).includes(activeOption.value) ? remove(activeOption.value) : add(activeOption);
@@ -69,6 +70,17 @@
 			activeOption = calcIndex < 0 ? filtered[filtered.length - 1]
 				: calcIndex === filtered.length ? filtered[0]
 					: filtered[calcIndex];
+
+			let el = document.querySelector<HTMLImageElement>(`#imgdiv :nth-child(${activeOption.value + 1})`)
+
+			console.log(el.parentElement.clientHeight, previousTop, el.offsetTop)
+			if (el.parentElement.clientHeight <= el.offsetTop - previousTop) {
+				previousTop = el.offsetTop - el.parentElement.clientHeight
+				el.parentElement.scrollTop = el.offsetTop - el.parentElement.clientHeight + el.clientHeight
+			} else if (previousTop > el.offsetTop) {
+				previousTop = el.offsetTop
+				el.parentElement.scrollTop = el.offsetTop
+			}
 		}
 	}
 

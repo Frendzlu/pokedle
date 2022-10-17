@@ -1,46 +1,8 @@
 <script lang="ts">
     import type Pokemon from "../Pokemon";
+    import {rarityColors, titleCase, toRoman, typeColors} from "../Utils";
 
 	export let pokemon: Pokemon
-
-	let typeColors = {
-		"grass": "#78c850",
-		"fire": "#f08030",
-		"water": "#6890f0",
-		"bug": "#a8b820",
-		"normal": "#a8a878",
-		"poison": "#a040a0",
-		"electric": "#f8d030",
-		"ground": "#e0c068",
-		"fairy": "#ee99ac",
-		"fighting": "#c03028",
-		"psychic": "#f85888",
-		"rock": "#b8a038",
-		"ghost": "#705898",
-		"ice": "#98d8d8",
-		"dragon": "#7038f8",
-		"steel": "#454545",
-		"flying": "#5eb9b2",
-		"dark": "#2d1c1c",
-		"shadow": "#260940",
-		"unknown": "#ffffff"
-	}
-
-	let rarityColors = {
-		"Normal": "#545454",
-		"Legendary": "#ff0000",
-		"Mythical": "#00ff00"
-	}
-
-	function titleCase(str: string) {
-		let x = str.charAt(0).toUpperCase()
-		return x + str.substring(1)
-	}
-
-	function toRoman(str: string) {
-		return ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"][parseInt(str)-1]
-	}
-
 </script>
 
 <style>
@@ -85,7 +47,7 @@
 </style>
 <div class="container w-48 m-2 shadow-2xl" style="background-color: #fff;">
 	<div class="container flex flex-row shadow-xl">
-		<div class="w-12 h-8 content-center" style="background-color: {pokemon.color}; height: 100%">
+		<div class="w-12 h-8 content-center" style="background-color: {pokemon.color !== 'white' ? pokemon.color : '#cecece'}; height: 100%">
 			<p class="vitext" style="text-align: center; line-height: 2.25rem;">#{pokemon.id}</p>
 		</div>
 		<b class="h-8 w-36 idtext vitext" style="text-align: center; line-height: 2rem">{titleCase(pokemon.name)}</b>
@@ -104,7 +66,7 @@
 			<td width=100>
 				<span>
 					{#each pokemon.types as type}
-						<div class="rounded-md w-3 h-3 tooltip" style="background-color: {typeColors[type]}">
+						<div class="rounded-md w-3 h-3 tooltip mx-1" style="background-color: {typeColors[type]}">
 							<span class="tooltiptext">{type}</span>
 						</div>
 					{/each}
@@ -115,12 +77,12 @@
 			</td>
 		</tr>
 		<tr>
-			<td><div class="flex flex-col"><span style="font-size:xx-small">Weight</span><br><span style="margin-top: -0.5rem;">{pokemon.weight}</span></div></td>
-			<td><div class="flex flex-col"><span style="font-size:xx-small">Height</span><br><span style="margin-top: -0.5rem;">{pokemon.height}</span></div></td>
+			<td><div class="flex flex-col"><span style="font-size:xx-small">Weight</span><span style="margin-top: -0.5rem;">{pokemon.weight}</span></div></td>
+			<td><div class="flex flex-col"><span style="font-size:xx-small">Height</span><span style="margin-top: -0.5rem;">{pokemon.height}</span></div></td>
 		</tr>
 		<tr>
-			<td><div class="flex flex-col"><span style="font-size:xx-small">Habitat</span><br><span style="margin-top: -0.5rem;">{pokemon.habitat}</span></div></td>
-			<td><div class="flex flex-col"><span style="font-size:xx-small">Shape</span><br><span style="margin-top: -0.5rem;">{pokemon.shape}</span></div></td>
+			<td><div class="flex flex-col"><span style="font-size:xx-small">Habitat</span><span style="margin-top: -0.5rem;">{pokemon.habitat}</span></div></td>
+			<td><div class="flex flex-col"><span style="font-size:xx-small">Shape</span><span style="margin-top: -0.5rem;">{pokemon.shape}</span></div></td>
 		</tr>
 	</table>
 </div>

@@ -1,3 +1,5 @@
+import {generationDict} from "./Utils";
+
 export interface IPokemon {
     name: string
     sprites: {
@@ -52,18 +54,6 @@ export interface Generation {
     main_region: NURI
 }
 
-const generationDict = {
-    "generation-i": 1,
-    "generation-ii": 2,
-    "generation-iii": 3,
-    "generation-iv": 4,
-    "generation-v": 5,
-    "generation-vi": 6,
-    "generation-vii": 7,
-    "generation-viii": 8,
-    "generation-ix": 9
-}
-
 function latinize(str: string) {
     let res = ""
     for (let i of "aeiouy"){
@@ -103,7 +93,7 @@ export default class Pokemon {
         //console.log(id)
         if (typeof (data as Pokemon).shape != "undefined"){
             data = data as Pokemon
-            this.imageUrl = data.imageUrl
+            this.imageUrl = data.imageUrl || "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png"
             this.types = data.types
             this.source = "localStorage"
             this.color = data.color
@@ -117,7 +107,9 @@ export default class Pokemon {
             this.species = data.species
         } else {
             data = data as IPokemon
-            this.imageUrl = data.sprites ? data.sprites.front_default : "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png"
+            if (data.sprites) {
+                this.imageUrl = data.sprites.front_default || "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png"
+            } else this.imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png"
             this.types = data.types.map(type => type.type.name)
             this.species = {
                 name: latinize(data.species.name),

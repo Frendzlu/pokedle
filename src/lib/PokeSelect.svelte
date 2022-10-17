@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import {createEventDispatcher} from 'svelte';
 	import { fly } from 'svelte/transition';
+	import {titleCase} from "../Utils";
 	export let id = '';
 	export let value ="";
 	export let options: {name: string, value: string, imgURL: string}[] = []
@@ -9,43 +10,85 @@
 
 	let input,
 		inputValue,
-		activeOption,
-		showOptions = false
+		activeOption = {name: "loading", value: "-1"},
+		showOptions = true
+
 
 	$: filtered = options.filter(o => inputValue ? o.name.toLowerCase().includes(inputValue.toLowerCase()) : o);
 	$: if (activeOption && !filtered.includes(activeOption) || !activeOption && inputValue) activeOption = filtered[0];
 
+	const dispatch = createEventDispatcher();
+
+	function submit(id) {
+		value = filtered.find(el => id == el.value);
+		inputValue = ""
+		optionsVisibility(false)
+		previousTop = 0
+		activeOption = {name: "loading", value: "-1"}
+		dispatch('submit', {
+			pokemon: value
+		});
+	}
 
 	function optionsVisibility(show) {
-		if (readonly) return;
-		if (typeof show === 'boolean') {
-			showOptions = show;
-			show && input.focus();
-		} else {
-			showOptions = !showOptions;
-		}
-		if (!showOptions) {
-			activeOption = undefined;
+		try {
+			// if (readonly) return;
+			// if (typeof show === 'boolean') {
+			// 	showOptions = show;
+			// 	show && input.focus();
+			// } else {
+			// 	showOptions = !showOptions;
+			// }
+		} catch (e) {
+			console.log(e)
 		}
 	}
 
+	let previousTop = 0
+
 	function handleKeyup(e) {
 		if (e.keyCode === 13) {
-			value = activeOption.value
-			inputValue = ""
-		}
-		if ([38,40].includes(e.keyCode)) { // up and down arrows
-			const increment = e.keyCode === 38 ? -1 : 1;
-			const calcIndex = filtered.indexOf(activeOption) + increment;
-			activeOption = calcIndex < 0 ? filtered[filtered.length - 1]
-				: calcIndex === filtered.length ? filtered[0]
-					: filtered[calcIndex];
+			submit(activeOption.value)
+		} else if ([39,37].includes(e.keyCode)) { // up and down arrows
+			const increment = e.keyCode === 37 ? -1 : 1;
+			const currentIndex = filtered.indexOf(activeOption) + increment;
+			let newIndex = currentIndex < 0 ? filtered.length - 1
+				: currentIndex === filtered.length ? 0 : currentIndex;
+			activeOption = filtered[newIndex]
+			let el = document.querySelector<HTMLImageElement>(`#imgdiv :nth-child(${newIndex + 1})`)
+
+			if (el.parentElement.clientHeight <= el.offsetTop - previousTop) {
+				previousTop = el.offsetTop - el.parentElement.clientHeight
+				el.parentElement.scrollTop = el.offsetTop - el.parentElement.clientHeight + el.clientHeight
+			} else if (previousTop > el.offsetTop) {
+				previousTop = el.offsetTop
+				el.parentElement.scrollTop = el.offsetTop
+			}
+		} else if ([38, 40].includes(e.keyCode)) {
+			const currentIndex = filtered.indexOf(activeOption)
+			let el = document.querySelector<HTMLImageElement>(`#imgdiv :nth-child(${currentIndex + 1})`)
+			let elemsPerRow = Math.floor(el.parentElement.clientWidth / el.clientWidth)
+			const increment = e.keyCode === 38 ? -elemsPerRow: elemsPerRow;
+			let lastRowElems = filtered.length % elemsPerRow
+			let indexMod = currentIndex + increment
+			let newIndex = indexMod < 0 ? -indexMod > lastRowElems ? filtered.length + (indexMod + lastRowElems) : filtered.length - 1
+				: indexMod >= filtered.length ? indexMod < 2 * filtered.length ? indexMod - filtered.length : 0
+					: indexMod;
+			activeOption = filtered[newIndex]
+			let newEl = document.querySelector<HTMLImageElement>(`#imgdiv :nth-child(${newIndex + 1})`)
+
+			if (newEl.parentElement.clientHeight <= newEl.offsetTop - previousTop) {
+				previousTop = newEl.offsetTop - newEl.parentElement.clientHeight
+				newEl.parentElement.scrollTop = newEl.offsetTop - newEl.parentElement.clientHeight + newEl.clientHeight
+			} else if (previousTop > newEl.offsetTop) {
+				previousTop = newEl.offsetTop
+				newEl.parentElement.scrollTop = newEl.offsetTop
+			}
 		}
 	}
 
 	function handleOptionMousedown(e) {
-		value = e.target.dataset.value;
-		console.log(e)
+		submit(e.target.dataset.value)
 	}
 
 	let slot;
@@ -151,11 +194,12 @@
         display: none;
     }
 </style>
+<p>{activeOption ? titleCase(activeOption.name) : "No pokemon found"}</p>
 <div class="multiselect rounded-md" class:readonly>
 	<div class="tokens rounded-md" class:showOptions>
 		<div class="actions rounded-md">
 			{#if !readonly}
-				<input class="rounded-md" id={id} autocomplete="off" bind:value={inputValue} bind:this={input} on:keyup={handleKeyup} on:focus={()=>optionsVisibility(true)} on:blur={()=>optionsVisibility(false)} placeholder={placeholder}/>
+				<input class="rounded-md" id={id} autocomplete="off" bind:value={inputValue} bind:this={input} on:keydown={handleKeyup} on:focus={()=>optionsVisibility(true)} on:blur={()=>optionsVisibility(false)} placeholder={placeholder}/>
 				<svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M5 8l4 4 4-4z"></path></svg>
 			{/if}
 		</div>
@@ -168,9 +212,9 @@
 	</select>
 
 	{#if showOptions}
-		<div class="options flex flex-row flex-wrap rounded-md" transition:fly="{{duration: 200, y: 5}}" on:mousedown|preventDefault={handleOptionMousedown}>
+		<div id="imgdiv" class="options flex flex-row flex-wrap rounded-md" transition:fly="{{duration: 200, y: 5}}" on:mousedown|preventDefault={handleOptionMousedown}>
 			{#each filtered as option}
-				<img class="w-14" src={option.imgURL} class:active={activeOption === option} data-value="{option.value}">
+				<img class="w-14" src={option.imgURL} class:active={activeOption === option} data-value="{option.value}" alt="sus">
 			{/each}
 		</div>
 	{/if}
