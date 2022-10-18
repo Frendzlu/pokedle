@@ -48,22 +48,22 @@
 	</script>
 	<div style="background-color: #aeaeae; min-height: 100vh" class="pb-12">
 		<div class="flex justify-between mx-8">
-			<div>
+			<div class="w-48">
 				<label for="name" class="block text-sm font-medium text-gray-700">Name</label>
 				<div class="relative mt-1 rounded-md shadow-sm">
-					<input bind:value={name} on:input={() => currentPage = 0} placeholder="Name..." type="text" id="name" class="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+					<input bind:value={name} on:input={() => currentPage = 0} placeholder="Name..." type="text" id="name" class="block w-full rounded-md border-gray-300 pl-2 pr-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
 				</div>
 			</div>
-			<div>
+			<div class="w-48">
 				<label for="species" class="block text-sm font-medium text-gray-700">Species</label>
 				<div class="relative mt-1 rounded-md shadow-sm">
-					<input bind:value={species} on:input={() => currentPage = 0} placeholder="Species..." type="text" id="species" class="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+					<input bind:value={species} on:input={() => currentPage = 0} placeholder="Species..." type="text" id="species" class="block w-full rounded-md border-gray-300 pl-2 pr-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
 				</div>
 			</div>
-			<div>
+			<div class="w-24">
 				<label for="height" class="block text-sm font-medium text-gray-700">Height</label>
 				<div class="relative mt-1 rounded-md shadow-sm">
-					<input bind:value={height} on:input={() => currentPage = 0} type="text" id="height" class="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="0">
+					<input bind:value={height} on:input={() => currentPage = 0} type="text" id="height" class="block w-full rounded-md border-gray-300 pl-2 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="0">
 					<div class="absolute inset-y-0 right-0 flex items-center">
 						<select bind:value={heightMode} on:input={() => currentPage = 0} class="h-full rounded-md border-transparent bg-transparent py-0 pl-2 pr-0 text-gray-500 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
 							<option value=">">&gt;</option>
@@ -73,10 +73,10 @@
 					</div>
 				</div>
 			</div>
-			<div>
+			<div class="w-24">
 				<label for="weight" class="block text-sm font-medium text-gray-700">Weight</label>
 				<div class="relative mt-1 rounded-md shadow-sm">
-					<input bind:value={weight} on:input={() => currentPage = 0} type="text" id="weight" class="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="0">
+					<input bind:value={weight} on:input={() => currentPage = 0} type="text" id="weight" class="block w-full rounded-md border-gray-300 pl-2 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="0">
 					<div class="absolute inset-y-0 right-0 flex items-center">
 						<select bind:value={weightMode} on:input={() => currentPage = 0} class="h-full rounded-md border-transparent bg-transparent py-0 pl-2 pr-0 text-gray-500 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
 							<option value=">">&gt;</option>
@@ -86,7 +86,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="relative" style="min-width: 15rem;">
+			<div class="relative w-64">
 				<label class="block text-sm font-medium text-gray-700">Types</label>
 				<div class="relative mt-1 rounded-md shadow-sm">
 					<div class="absolute inset-y-0 right-0 flex items-center">
@@ -113,10 +113,10 @@
 					</div>
 				</div>
 			</div>
-			<div>
+			<div class="w-28">
 				<label for="shape" class="block text-sm font-medium text-gray-700">Shape</label>
 				<div class="relative mt-1 rounded-md shadow-sm">
-					<select id="shape" bind:value={shape} on:input={() => currentPage = 0} class="h-full block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white">
+					<select id="shape" bind:value={shape} on:input={() => currentPage = 0} class="h-full block w-full rounded-md border-gray-300 pl-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white">
 						<option value="all" selected>All</option>
 						<option value="quadruped">Quadruped</option>
 						<option value="upright">Upright</option>
@@ -136,10 +136,10 @@
 					</select>
 				</div>
 			</div>
-			<div>
+			<div class="w-16">
 				<label for="generation" class="block text-sm font-medium text-gray-700">Generation</label>
 				<div class="relative mt-1 rounded-md shadow-sm">
-					<select id="generation" bind:value={generation} on:input={() => currentPage = 0} class="h-full block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white">
+					<select id="generation" bind:value={generation} on:input={() => currentPage = 0} class="h-full block w-full rounded-md border-gray-300 pl-3 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white">
 						<option value="-1" selected>All</option>
 						<option value="1">I</option>
 						<option value="2">II</option>
@@ -152,10 +152,10 @@
 					</select>
 				</div>
 			</div>
-			<div>
+			<div class="w-32">
 				<label for="habitat" class="block text-sm font-medium text-gray-700">Habitat</label>
 				<div class="relative mt-1 rounded-md shadow-sm">
-					<select id="habitat" bind:value={habitat} on:input={() => currentPage = 0} class="h-full block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white">
+					<select id="habitat" bind:value={habitat} on:input={() => currentPage = 0} class="h-full block w-full rounded-md border-gray-300 pl-1 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white">
 						<option value="all" selected>All</option>
 						<option value="grassland">Grassland</option>
 						<option value="mountain">Mountain</option>

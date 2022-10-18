@@ -1,6 +1,6 @@
 <script lang="ts">
     import type Pokemon from "../Pokemon";
-    import {rarityColors, titleCase, toRoman, typeColors} from "../Utils";
+    import {fixHabitat, rarityColors, titleCase, toRoman, typeColors} from "../Utils";
 
 	export let pokemon: Pokemon
 </script>
@@ -60,14 +60,14 @@
 			<td colspan="2"><span>Generation: {toRoman(pokemon.generation)}</span></td>
 		</tr>
 		<tr>
-			<td colspan="2"><span>Species: {pokemon.species.name}</span></td>
+			<td colspan="2"><span>Species: {titleCase(pokemon.species.name)}</span></td>
 		</tr>
 		<tr>
 			<td width=100>
 				<span>
 					{#each pokemon.types as type}
 						<div class="rounded-md w-3 h-3 tooltip mx-1" style="background-color: {typeColors[type]}">
-							<span class="tooltiptext">{type}</span>
+							<span class="tooltiptext">{titleCase(type)}</span>
 						</div>
 					{/each}
 				</span>
@@ -81,8 +81,8 @@
 			<td><div class="flex flex-col"><span style="font-size:xx-small">Height</span><span style="margin-top: -0.5rem;">{pokemon.height}</span></div></td>
 		</tr>
 		<tr>
-			<td><div class="flex flex-col"><span style="font-size:xx-small">Habitat</span><span style="margin-top: -0.5rem;">{pokemon.habitat}</span></div></td>
-			<td><div class="flex flex-col"><span style="font-size:xx-small">Shape</span><span style="margin-top: -0.5rem;">{pokemon.shape}</span></div></td>
+			<td><div class="flex flex-col"><span style="font-size:xx-small">Habitat</span><span style="margin-top: -0.5rem;">{fixHabitat(pokemon.habitat)}</span></div></td>
+			<td><div class="flex flex-col"><span style="font-size:xx-small">Shape</span><span style="margin-top: -0.5rem;">{titleCase(pokemon.shape)}</span></div></td>
 		</tr>
 	</table>
 </div>
